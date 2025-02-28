@@ -6,9 +6,9 @@ def convert_length(value, from_unit, to_unit):
         "kilometer": 1000,
         "mile": 1609.34,
         "yard": 0.9144,
-        "feet": 0.3048,
+        "foot": 0.3048,
     }
-    return value * conversion_factors[from_unit] / conversion_factors[to_unit]
+    return value * conversion_factors.get(from_unit, 1) / conversion_factors.get(to_unit, 1)
 
 def convert_weight(value, from_unit, to_unit):
     conversion_factors = {
@@ -17,7 +17,7 @@ def convert_weight(value, from_unit, to_unit):
         "pound": 0.453592,
         "ounce": 0.0283495,
     }
-    return value * conversion_factors[from_unit] / conversion_factors[to_unit]
+    return value * conversion_factors.get(from_unit, 1) / conversion_factors.get(to_unit, 1)
 
 def convert_temperature(value, from_unit, to_unit):
     if from_unit == to_unit:
@@ -36,6 +36,7 @@ def convert_temperature(value, from_unit, to_unit):
         return (value - 273.15) * 9/5 + 32
 
 def main():
+    st.set_page_config(page_title="Unit Converter", layout="centered")
     st.title("Unit Converter")
 
     st.sidebar.header("Choose Conversion Type")
@@ -49,8 +50,11 @@ def main():
         from_unit = st.selectbox("From Unit", ["meter", "kilometer", "mile", "yard", "foot"])
         to_unit = st.selectbox("To Unit", ["meter", "kilometer", "mile", "yard", "foot"])
         if st.button("Convert"):
-            result = convert_length(value, from_unit, to_unit)
-            st.success(f"{value} {from_unit} = {result:.2f} {to_unit}")
+            try:
+                result = convert_length(value, from_unit, to_unit)
+                st.success(f"{value} {from_unit} = {result:.2f} {to_unit}")
+            except Exception as e:
+                st.error(f"Error: {e}")
 
     elif conversion_type == "Weight":
         st.subheader("Weight Conversion")
@@ -58,8 +62,11 @@ def main():
         from_unit = st.selectbox("From Unit", ["kilogram", "gram", "pound", "ounce"])
         to_unit = st.selectbox("To Unit", ["kilogram", "gram", "pound", "ounce"])
         if st.button("Convert"):
-            result = convert_weight(value, from_unit, to_unit)
-            st.success(f"{value} {from_unit} = {result:.2f} {to_unit}")
+            try:
+                result = convert_weight(value, from_unit, to_unit)
+                st.success(f"{value} {from_unit} = {result:.2f} {to_unit}")
+            except Exception as e:
+                st.error(f"Error: {e}")
 
     elif conversion_type == "Temperature":
         st.subheader("Temperature Conversion")
@@ -67,8 +74,11 @@ def main():
         from_unit = st.selectbox("From Unit", ["celsius", "fahrenheit", "kelvin"])
         to_unit = st.selectbox("To Unit", ["celsius", "fahrenheit", "kelvin"])
         if st.button("Convert"):
-            result = convert_temperature(value, from_unit, to_unit)
-            st.success(f"{value} {from_unit} = {result:.2f} {to_unit}")
+            try:
+                result = convert_temperature(value, from_unit, to_unit)
+                st.success(f"{value} {from_unit} = {result:.2f} {to_unit}")
+            except Exception as e:
+                st.error(f"Error: {e}")
 
 if __name__ == "__main__":
     main()
